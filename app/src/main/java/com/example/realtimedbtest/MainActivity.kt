@@ -2,6 +2,8 @@ package com.example.realtimedbtest
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.realtimedbtest.adapters.ChattingRecyclerAdapter
 import com.example.realtimedbtest.datas.ChattingData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,6 +19,8 @@ class MainActivity : BaseActivity() {
     var messageCount = 0L // DB에 저장된 채팅 갯수를 담을 변수. Long 타입으로 저장
 
     val mChattingList = ArrayList<ChattingData>()
+
+    lateinit var mAdapter: ChattingRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,8 @@ class MainActivity : BaseActivity() {
                         snapshot.children.last().child("createdAt").value.toString()
                     )
                 )
+
+                mAdapter.notifyDataSetChanged()
 
             }
 
@@ -75,6 +81,9 @@ class MainActivity : BaseActivity() {
 
     override fun setValues() {
 
+        mAdapter = ChattingRecyclerAdapter(mContext, mChattingList)
+        chattingRecyclerView.adapter = mAdapter
+        chattingRecyclerView.layoutManager = LinearLayoutManager(mContext)
 
     }
 }
